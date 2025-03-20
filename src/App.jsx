@@ -29,13 +29,20 @@ Gli utenti devono iscriversi indicando le loro competenze e specializzazioni. */
     Al submit, se il form è valido, stampa in console i dati. */
 
 function App() {
+  /* State per il nome */
   const [name, setName] = useState("");
+  /* State per l'username */
   const [username, setUsername] = useState("");
+  /* State per la password */
   const [password, setPassword] = useState("");
+  /* State per gli anni di esperienza */
   const [number, setNumber] = useState("");
+  /* State per la descrizione */
   const [description, setDescription] = useState("");
+  /* State per la specializzazione */
   const [specializzazione, setSpecializzazione] = useState("");
 
+  /* Funzione per inviare i dati con il form */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
