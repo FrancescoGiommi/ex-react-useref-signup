@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import "./App.css";
 
@@ -48,15 +48,34 @@ Gli utenti devono iscriversi indicando le loro competenze e specializzazioni. */
 
 /* Per ciascuno dei campi validati in tempo reale, mostrare un messaggio di errore (rosso) nel caso non siano validi, oppure un messaggio di conferma (verde) nel caso siano validi. */
 
+//! Milestone 3: Convertire i Campi Non Controllati
+
+/* Non tutti i campi del form necessitano di essere aggiornati a ogni carattere digitato. Alcuni di essi non influenzano direttamente l’interfaccia mentre l’utente li compila, quindi è possibile gestirli in modo più efficiente.
+
+    Analizza il form: Identifica quali campi devono rimanere controllati e quali invece possono essere non controllati senza impattare l’esperienza utente.
+    Converti i campi non controllati: Usa useRef() per gestirli e recuperare il loro valore solo al momento del submit.
+    Assicurati che la validazione continui a funzionare: Anche se un campo non è controllato, deve comunque essere validato correttamente quando l’utente invia il form. */
+
+//! Bonus: Migliorare l'Usabilità
+
+/* Utilizziamo useRef() per migliorare l’esperienza utente, implementando le seguenti funzionalità:
+
+    Focus automatico al primo input (Nome) al mount del componente.
+    Bottone "Reset" in fondo al form per ripristinare tutti i valori:
+        Gli input controllati devono tornare ai valori iniziali.
+        Gli input non controllati devono essere resettati manualmente usando useRef().
+    Freccia fissa in basso a destra che, quando cliccata, riporta l'utente all'inizio del form (bisogna usare position: fixed). */
+
 function App() {
+  console.log("render");
   /* State per il nome */
-  const [name, setName] = useState("");
+  const nameRef = useRef();
   /* State per l'username */
   const [username, setUsername] = useState("");
   /* State per la password */
   const [password, setPassword] = useState("");
   /* State per gli anni di esperienza */
-  const [number, setNumber] = useState("");
+  const numberRef = useRef();
   /* State per la descrizione */
   const [description, setDescription] = useState("");
   /* State per la specializzazione */
@@ -73,6 +92,7 @@ function App() {
   }
 
   const isValid = /^[a-zA-Z0-9]+$/.test(username) && username.length > 0;
+
   /* Funzione per inviare i dati con il form */
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,10 +102,10 @@ function App() {
 
     /* Verifico che tutti i campi siano compilati */
     if (
-      !name ||
+      !nameRef ||
       !username ||
       !password ||
-      !number ||
+      !numberRef ||
       !description ||
       !specializzazione
     ) {
@@ -102,7 +122,8 @@ function App() {
     if (description.trim().length < 100 || description.trim().length > 1000) {
       console.log("Descrizione non valida");
     }
-
+    const name = nameRef.current.value;
+    const number = numberRef.current.value;
     /* Stampo i dati in console */
     console.log(
       "Nome:",
@@ -133,8 +154,7 @@ function App() {
 
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            ref={nameRef}
             placeholder="Inserisci il tuo nome"
             required
           />
@@ -195,8 +215,7 @@ function App() {
           <label>Anni di esperienza</label>
           <input
             type="number"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            ref={numberRef}
             placeholder="Insersci gli anni di esperienza"
             min={0}
           />
