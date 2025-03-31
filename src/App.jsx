@@ -81,24 +81,25 @@ function App() {
   /* State per la specializzazione */
   const [specializzazione, setSpecializzazione] = useState("");
 
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{}|;:'\\ ,.<>?/`~";
+
   /* Funzione verifica della password */
   function isValidPassword(password) {
     const hasMinLength = password.length >= 8;
-    const hasLetter = /[a-zA-Z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSymbol = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
+    const hasLetter = password.split("").some((char) => letters.includes(char));
+    const hasNumber = password.split("").some((char) => numbers.includes(char));
+    const hasSymbol = password.split("").some((char) => symbols.includes(char));
 
     return hasMinLength && hasLetter && hasNumber && hasSymbol;
   }
 
-  const isValid = /^[a-zA-Z0-9]+$/.test(username) && username.length > 0;
+  const isValid = /^[a-zA-Z0-9]+$/.test(username) && username.length >= 6;
 
   /* Funzione per inviare i dati con il form */
   const handleSubmit = (e) => {
     e.preventDefault();
-    const letters = "abcdefghijklmnopqrstuvwxyz";
-    const numbers = "0123456789";
-    const symbols = "!@#$%^&*()-_=+[]{}|;:'\\ ,.<>?/`~";
 
     /* Verifico che tutti i campi siano compilati */
     if (
@@ -109,7 +110,7 @@ function App() {
       !description ||
       !specializzazione
     ) {
-      console.log("Compila tutti i campi");
+      alert("Compila tutti i campi");
       return;
     }
 
@@ -125,20 +126,14 @@ function App() {
     const name = nameRef.current.value;
     const number = numberRef.current.value;
     /* Stampo i dati in console */
-    console.log(
-      "Nome:",
-      name,
-      "Username:",
-      username,
-      "Password:",
-      password,
-      "Anni di esperienza:",
-      number,
-      "Descrizione:",
-      description,
-      "Specializzazione:",
-      specializzazione
-    );
+    console.log({
+      Nome: name,
+      Username: username,
+      Password: password,
+      Anni_di_esperienza: number,
+      Descrizione: description,
+      Specializzazione: specializzazione,
+    });
   };
 
   const handleSelect = (e) => {
@@ -150,7 +145,7 @@ function App() {
       <form onSubmit={handleSubmit} className="d-flex flex-row">
         <div>
           {/* 1. Nome completo */}
-          <label>Nome</label>
+          <label className="d-block">Nome</label>
 
           <input
             type="text"
@@ -161,7 +156,7 @@ function App() {
         </div>
         <div>
           {/* 2. Username */}
-          <label>Username</label>
+          <label className="d-block">Username</label>
 
           <input
             type="text"
@@ -178,7 +173,7 @@ function App() {
         </div>
         <div>
           {/* 3. Password */}
-          <label>Password</label>
+          <label className="d-block">Password</label>
           <input
             type="password"
             value={password}
@@ -197,7 +192,7 @@ function App() {
         </div>
         <div>
           {/* 4. Specializzazione */}
-          <label>Specializzazione</label>
+          <label className="d-block">Specializzazione</label>
           <select
             name="specializzazione"
             value={specializzazione}
@@ -212,7 +207,7 @@ function App() {
         </div>
         <div>
           {/* 5. Anni di esperienza */}
-          <label>Anni di esperienza</label>
+          <label className="d-block">Anni di esperienza</label>
           <input
             type="number"
             ref={numberRef}
@@ -222,7 +217,7 @@ function App() {
         </div>
         <div>
           {/* 6. Breve descrizione */}
-          <label>Descrizione</label>
+          <label className="d-block">Descrizione</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
